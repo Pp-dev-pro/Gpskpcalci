@@ -1,0 +1,159 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CASIO fx-991ES PLUS</title>
+<style>
+:root{--pg:#dfe3ea;--g:#e0b02a;--r:#ee4d62;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--pg:#14161a}}
+:root[data-theme=dark]{--pg:#14161a}
+html,body{margin:0}body{background:var(--pg);display:flex;justify-content:center;padding:14px;font-family:Arial,Helvetica,sans-serif;touch-action:manipulation}
+#c{width:350px;max-width:100%;box-sizing:border-box;background:linear-gradient(#2c2d30,#18191b);border-radius:28px 28px 46px 46px;padding:14px 15px 24px;box-shadow:0 14px 34px #0009,inset 0 0 0 2px #3b3c40;color:#ddd;user-select:none}
+.hd{display:flex;justify-content:space-between;align-items:flex-start;padding:0 4px}
+.hd b{font-size:15px;letter-spacing:1px;color:#eee}.hd small{display:block;font-size:8px;color:#aaa;font-style:italic;margin-top:2px}
+.sol{width:118px;height:32px;background:linear-gradient(135deg,#4b2a22,#1b100d);border:2px solid #3f4044;border-radius:3px}
+#lcd{margin:6px 0 14px;background:#cbd3c2;border:7px solid #0f0f10;border-radius:7px;height:112px;padding:3px 8px;color:#151515;position:relative;font-family:"Courier New",monospace;box-shadow:inset 0 0 10px #0007;overflow:hidden}
+#lcd.off>*{visibility:hidden}
+#sb{height:14px;font-size:9px;display:flex;gap:7px;font-weight:bold}#sb span:last-child{margin-left:auto}
+#l1{height:40px;font-size:20px;line-height:40px;white-space:nowrap;overflow:hidden}#l1.m{font-size:13px;line-height:17px;white-space:normal;height:76px}
+#l2{text-align:right;font-size:27px;height:42px;line-height:42px;white-space:nowrap;overflow:hidden}
+.cur{display:inline-block;width:2px;height:20px;background:#111;vertical-align:middle;animation:b 1s steps(1) infinite}@keyframes b{50%{opacity:0}}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:20px;font-size:21px}.fr i{font-style:normal;padding:0 3px}.fr i:first-child{border-bottom:2px solid #151515}
+.g{display:grid;gap:5px 8px;margin-bottom:9px;align-items:end}.g6{grid-template-columns:repeat(6,1fr)}.g5{grid-template-columns:repeat(5,1fr);gap:9px 9px}
+.w{position:relative;padding-top:12px}.sl,.al{position:absolute;top:0;font-size:8px;font-style:normal;white-space:nowrap}.sl{left:1px;color:var(--g)}.al{right:1px;color:var(--r)}
+button{width:100%;border:0;color:#f1f1f1;font:600 11px Arial,sans-serif;cursor:pointer;box-shadow:0 2px 0 #000a,inset 0 1px 0 #ffffff22;padding:0}
+button:active{transform:translateY(1px);filter:brightness(1.3)}
+.s{height:23px;border-radius:12px;background:#3c3d41}.n{height:33px;border-radius:11px;background:#58595d;font-size:17px}.n.o{background:#3c3d41;font-size:19px}
+.gr{background:#8cc63f;color:#111}.sh{background:#4a4b4f;color:var(--g)}.sh.on{background:var(--g);color:#111}.alp{background:#4a4b4f;color:var(--r)}.alp.on{background:var(--r);color:#fff}
+.dp{grid-column:3/5;grid-row:1/3;position:relative;height:78px;margin:0 4px;align-self:center}.dp::before{content:"";position:absolute;inset:14px 24px;border-radius:50%;background:#2a2b2e}
+.dp button{position:absolute;width:42px;height:27px;border-radius:50%;background:#494a4e;font-size:10px;color:#bbb}.dp .u{left:50%;top:0;margin-left:-21px}.dp .dn{left:50%;bottom:0;margin-left:-21px}.dp .l{left:0;top:25px}.dp .r{right:0;top:25px}
+</style></head><body>
+<div id="c"><div class="hd"><div><b>CASIO</b><small>fx-991ES PLUS &nbsp;2nd edition</small></div><div class="sol"></div></div>
+<div id="lcd"><div id="sb"></div><div id="l1"></div><div id="l2"></div></div>
+<div class="g g6" id="g6"></div><div class="g g5" id="g5"></div></div>
+<script>
+const $=s=>document.querySelector(s),M=Math;
+const N=d=>({d,j:d,t:'n'}),F=(d,j)=>({d,j,t:'f'}),O=(d,j)=>({d,j,t:'o'}),C=(d,j)=>({d,j,t:'c'}),P=(d,j,w,c)=>({d,j,t:'p',w,c});
+const V={Ans:0,A:0,B:0,C:0,D:0,E:0,F:0,X:0,Y:0,M:0};
+let SH=0,AL=0,HY=0,pend=null,menu=null,off=0,ow=0,cur=0,T=[],done=0,res=null,hist=[],hi=0,pr=null,err='',ang='D',io='M',base=10,disp={m:'n',n:1};
+const r=x=>ang=='D'?x*M.PI/180:ang=='G'?x*M.PI/200:x,dg=x=>ang=='D'?x*180/M.PI:ang=='G'?x*200/M.PI:x,Z=x=>M.abs(x)<1e-13?0:x;
+const CV=[x=>x*2.54,x=>x/2.54,x=>x*.45359237,x=>x/.45359237,x=>(x-32)*5/9,x=>x*9/5+32,x=>x*1.609344,x=>x/1.609344,x=>x*3.785411784],CVN=['in▸cm','cm▸in','lb▸kg','kg▸lb','°F▸°C','°C▸°F','mile▸km','km▸mile','gal▸L'];
+const fac=n=>{if(n<0||n%1||n>69)return NaN;let s=1;for(let i=2;i<=n;i++)s*=i;return s};
+const Fn={Fsin:x=>Z(M.sin(r(x))),Fcos:x=>Z(M.cos(r(x))),Ftan:x=>M.abs(M.cos(r(x)))<1e-13?NaN:Z(M.tan(r(x))),
+Fasin:x=>dg(M.asin(x)),Facos:x=>dg(M.acos(x)),Fatan:x=>dg(M.atan(x)),Fsinh:M.sinh,Fcosh:M.cosh,Ftanh:M.tanh,Fasinh:M.asinh,Facosh:M.acosh,Fatanh:M.atanh,
+Flog:M.log10,Fln:M.log,Fp10:x=>10**x,Fexp:M.exp,Fsqrt:M.sqrt,Fcbrt:M.cbrt,Fxr:(a,b)=>b<0&&a%2?-((-b)**(1/a)):b**(1/a),Flogb:(a,b)=>M.log(b)/M.log(a),
+Ffac:fac,Fnpr:(n,k)=>fac(n)/fac(n-k),Fncr:(n,k)=>fac(n)/(fac(k)*fac(n-k)),
+Fint:(f,a,b)=>{let n=2000,h=(b-a)/n,s=f(a)+f(b);for(let i=1;i<n;i++)s+=f(a+i*h)*(i%2?4:2);return s*h/3},
+Fdif:(f,a)=>{let h=1e-3;return(-f(a+2*h)+8*f(a+h)-8*f(a-h)+f(a-2*h))/(12*h)},
+Fsum:(f,a,b)=>{let s=0;if(b-a>1e6)return NaN;for(let i=a;i<=b;i++)s+=f(i);return s},
+Fpol:(x,y)=>{V.Y=dg(M.atan2(y,x));return V.X=M.hypot(x,y)},Frec:(q,t)=>{V.Y=q*Fn.Fsin(t);return V.X=q*Fn.Fcos(t)},
+Fran:()=>M.floor(M.random()*1000)/1000,Frnd:x=>disp.m=='f'?+x.toFixed(disp.n):+x.toPrecision(10),
+Fdrg:(x,u)=>{let q=u=='D'?x*M.PI/180:u=='R'?x:x*M.PI/200;return dg(q*(ang=='D'?1:1))*(ang=='D'?1:1)},Fcv:(i,x)=>CV[i](x)};
+Fn.Fdrg=(x,u)=>{let q=u=='D'?x*M.PI/180:u=='R'?x:x*M.PI/200;return dg(q)};
+const vs=t=>t&&'ncp)'.includes(t.t),st=t=>t&&'ncf(u'.includes(t.t);
+function bd(A){let o=[],q=[],dp=0;
+A.forEach((t,i)=>{let p=A[i-1],j=t.j;if(t.t=='u')j=p&&(p.t=='E'||p.j=='**')?'-':'(-1)*';
+q[i]=vs(p)&&st(t)&&!(p.t=='n'&&t.t=='n')&&!(t.t=='u'&&j=='-')?'*':'';o[i]=j;
+if('f('.includes(t.t))dp++;if(t.t==')')dp--});
+A.forEach((t,i)=>{if(!t.w)return;let s=i-1,d=0;if(s>=0&&A[s].t==')'){for(;s>=0;s--){d+=A[s].t==')'?1:'f('.includes(A[s].t)?-1:0;if(!d)break}}else while(s>0&&A[s].t=='n'&&A[s-1].t=='n')s--;
+if(s<0)throw 1;o[s]=t.w+o[s];o[i]=t.c});
+return(o.map((x,i)=>q[i]+x).join('')+')'.repeat(M.max(0,dp))).replace(/(^|[^\d.])0+(?=\d)/g,'$1')}
+const ev=s=>Function('F','V','with(F)with(V)return('+s+')')(Fn,V);
+const SUP={0:'⁰',1:'¹',2:'²',3:'³',4:'⁴',5:'⁵',6:'⁶',7:'⁷',8:'⁸',9:'⁹','-':'⁻'},sup=n=>String(n).replace(/./g,c=>SUP[c]);
+function frac(x){let s=x<0?-1:1,a=M.abs(x),h1=1,h0=0,k1=0,k0=1,b=a;for(let i=0;i<20;i++){let f=M.floor(b);[h1,h0]=[f*h1+h0,h1];[k1,k0]=[f*k1+k0,k1];if(k1>9999)return null;if(M.abs(a-h1/k1)<1e-10*a)return k1>1?[s*h1,k1]:null;b=1/(b-f);if(!isFinite(b))break}return null}
+function sc(s){let[m,e]=s.split('e');if(m.includes('.')&&disp.m!='s')m=m.replace(/\.?0+$/,'');return m+'×10'+sup(+e)}
+function dec(x){if(x==0)return'0';if(disp.m=='f')return x.toFixed(disp.n);if(disp.m=='s')return sc(x.toExponential(disp.n?disp.n-1:9));
+let a=M.abs(x);if(disp.n==1&&a<.01)return sc(x.toExponential(9));let s=x.toPrecision(10);return s.includes('e')?sc(x.toExponential(9)):''+ +s}
+function resStr(){if(!res)return'0';if(res.s)return res.s;let x=res.x;if(base!=10){if(!Number.isInteger(x))return'Math ERROR';return(x>>>0).toString(base).toUpperCase()}
+if(res.fr){let f=frac(x);if(res.mx&&M.abs(f[0])>f[1]){let w=M.trunc(f[0]/f[1]);return(x<0?'-':'')+M.abs(w)+'⌟'+M.abs(f[0]-w*f[1])+'⌟'+f[1]}return f[0]+'/'+f[1]}return dec(x)}
+function eq(){if(!T.length)return;try{let x=ev(bd(T));if(typeof x!='number'||!isFinite(x))throw'M';x=+x.toPrecision(15);V.Ans=x;res={x,fr:io=='M'&&!Number.isInteger(x)&&!!frac(x)};hist.push(T.slice());hi=hist.length;done=1;err=''}catch(e){err=e=='M'?'Math ERROR':'Syntax ERROR';res=null;done=0}}
+function solve(){let i=T.findIndex(t=>t.d=='=');if(i<0)throw 1;let L=bd(T.slice(0,i)),R=bd(T.slice(i+1)),g=x=>{V.X=x;return ev(L)-ev(R)};
+for(let x0 of[V.X,0,1,-1,5,-5,10,-10,50]){let x=x0;for(let k=0;k<80;k++){let f=g(x),h=1e-6*(1+M.abs(x)),d=(g(x+h)-g(x-h))/(2*h);if(M.abs(f)<1e-12){V.X=x;res={x,fr:0,s:'X='+dec(+x.toPrecision(12))};done=1;err='';return}if(!d||!isFinite(d))break;x-=f/d}}
+err="Can't Solve";res=null}
+function ins(t){if(done){if(t.t=='o'||t.t=='p'){T=[C('Ans','Ans')];cur=1}else{T=[];cur=0}done=0;res=null}
+err='';if(ow&&cur<T.length)T[cur]=t;else T.splice(cur,0,t);cur++}
+const na=()=>{err='Not available'},mu=(items,f,z,t)=>{menu={items,f,z,t}};
+const setB=b=>()=>{base=b;if(res)res.s=0};
+const tg=(a,b)=>[()=>{let h=HY;HY=0;ins(F(a+(h?'h':'')+'(','F'+a+(h?'h':'')+'('))},()=>{let h=HY;HY=0;ins(F(a+(h?'h':'')+'⁻¹(','Fa'+a+(h?'h':'')+'('))}];
+const clr=(m)=>{if(m!=2){ang='D';io='M';base=10;disp={m:'n',n:1}}if(m!=1)for(let k in V)V[k]=0;err='Reset'};
+const ac=()=>{T=[];cur=0;res=null;err='';done=0;pr=null;pend=null};
+const K={};
+const B=(id,l,c,sl,al,n,s,a)=>{K[id]={n,s,a};return`<div class=w><i class=sl>${sl||''}</i><i class=al>${al||''}</i><button class="${c}" data-k=${id}>${l}</button></div>`};
+const L=x=>C(x,x),dg_=i=>[N(''+i)];
+const [sinN,sinS]=tg('sin'),[cosN,cosS]=tg('cos'),[tanN,tanS]=tg('tan');
+const CONS=[['mp','1.67262192e-27'],['mn','1.67492750e-27'],['me','9.1093837e-31'],['c','299792458'],['G','6.6743e-11'],['h','6.62607015e-34'],['k','1.380649e-23'],['NA','6.02214076e23'],['R','8.314462618']];
+const CALC=()=>{if(!T.length)return;if(T.some(t=>t.d=='X'&&t.t=='c'))pr={buf:''};else eq()};
+const afterEq=f=>()=>{if(!done)eq();if(res)f()};
+const mp=k=>()=>{if(!done)eq();if(res)V.M+=k*res.x};
+let h6='';
+h6+=B('sh','SHIFT','s sh');h6+=B('al','ALPHA','s alp');
+h6+='<div class=dp><button class=u data-k=up>▲</button><button class=dn data-k=dn>▼</button><button class=l data-k=lf>◀</button><button class=r data-k=rt>▶</button></div>';
+h6+=B('mode','MODE','s','SETUP','',()=>mu(['1:COMP','2:CMPLX','3:STAT','4:BASE-N','5:EQN','6:MATRIX','7:TABLE','8:VECTOR'],i=>{if(i==1)base=10;else if(i==4)mu(['1:DEC','2:HEX','3:BIN','4:OCT'],j=>setB([10,16,2,8][j-1])());else na()},0,'MODE'),
+()=>mu(['1:MthIO','2:LineIO','3:Deg','4:Rad','5:Gra','6:Fix','7:Sci','8:Norm'],i=>{if(i<3)io=i==1?'M':'L';else if(i<6)ang='DRG'[i-3];else if(i<8)mu([0,1,2,3,4,5,6,7,8,9],n=>{disp={m:i==6?'f':'s',n}},1,i==6?'Fix 0~9?':'Sci 0~9?');else mu(['1:Norm1','2:Norm2'],j=>{disp={m:'n',n:j}})},0,'SETUP'));
+h6+=B('on','ON','s','','',()=>{ac()});
+h6+=B('calc','CALC','s','SOLVE','=',CALC,()=>{try{solve()}catch(e){err='Syntax ERROR'}},O('=','=='));
+h6+=B('int','∫▫','s','d/dx',':',F('∫(','Fint(X=>'),F('d/dx(','Fdif(X=>'),O(':',':'));
+h6+=B('inv','x⁻¹','s','x!','',P('⁻¹','**-1'),P('!','',  'Ffac(',')'));
+h6+=B('lgb','logₐ▫','s','Σ','',F('log(','Flogb('),F('Σ(','Fsum(X=>'));
+h6+=B('frac','▫/▫','s','a b/c','',O('/','/'),()=>{if(res&&res.fr)res.mx=!res.mx});
+h6+=B('sqrt','√▫','s','³√','',F('√(','Fsqrt('),F('³√(','Fcbrt('));
+h6+=B('sq','x²','s','x³','DEC',P('²','**2'),P('³','**3'),setB(10));
+h6+=B('pow','x▫','s','ˣ√','HEX',O('^','**'),F('ˣ√(','Fxr('),setB(16));
+h6+=B('log','log','s','10ˣ','BIN',F('log(','Flog('),F('10^(','Fp10('),setB(2));
+h6+=B('ln','ln','s','eˣ','OCT',F('ln(','Fln('),F('e^(','Fexp('),setB(8));
+h6+=B('neg','(–)','s','','A',{d:'-',j:'',t:'u'},0,L('A'));
+h6+=B('dms','° ′ ″','s','','B',afterEq(()=>{let x=res.x,s=x<0?'-':'';x=M.abs(x);let d=M.floor(x),m=M.floor((x-d)*60),c=+(((x-d)*60-m)*60).toFixed(2);res.s=s+d+'°'+m+'′'+c+'″'}),0,L('B'));
+h6+=B('hyp','hyp','s','','C',()=>{HY=!HY},0,L('C'));
+h6+=B('sin','sin','s','sin⁻¹','D',sinN,sinS,L('D'));h6+=B('cos','cos','s','cos⁻¹','E',cosN,cosS,L('E'));h6+=B('tan','tan','s','tan⁻¹','F',tanN,tanS,L('F'));
+h6+=B('rcl','RCL','s','STO','',()=>{pend='rcl'},()=>{pend='sto'});
+h6+=B('eng','ENG','s','','',afterEq(()=>{let x=res.x;if(!x)return;let e=M.floor(M.log10(M.abs(x))/3)*3;res.s=+(x/10**e).toPrecision(10)+'×10'+sup(e)}));
+h6+=B('lp','(','s','%','',{d:'(',j:'(',t:'('},P('%','/100'));
+h6+=B('rp',')','s',',','X',{d:')',j:')',t:')'},O(',',','),L('X'));
+h6+=B('sd','S⇔D','s','','Y',()=>{if(!done)eq();if(res&&!res.s&&!Number.isInteger(res.x)){if(res.fr)res.fr=0;else if(frac(res.x))res.fr=1}},0,L('Y'));
+h6+=B('mp','M+','s','M–','M',mp(1),mp(-1),L('M'));
+$('#g6').innerHTML=h6;
+let h5='';
+const nk=(i,sl,s)=>B('d'+i,i,'n',sl,'',N(''+i),s);
+h5+=nk(7,'CONST',()=>mu(CONS.map((c,i)=>(i+1)+':'+c[0]),i=>ins(C(CONS[i-1][0],CONS[i-1][1])),0,'CONST'));
+h5+=nk(8,'CONV',()=>mu(CVN.map((c,i)=>(i+1)+':'+c),i=>ins(F(CVN[i-1]+'(','Fcv('+(i-1)+','),0,'CONV')));
+h5+=nk(9,'CLR',()=>mu(['1:Setup','2:Memory','3:All'],clr,0,'CLR'));
+h5+=B('del','DEL','n gr','INS','',()=>{if(done){done=0;res=null;cur=T.length}if(cur>0){T.splice(cur-1,1);cur--}},()=>{ow=!ow});
+h5+=B('ac','AC','n gr','OFF','',ac,()=>{off=1});
+h5+=nk(4,'MATRIX',na)+nk(5,'VECTOR',na)+nk(6,'',0);
+h5+=B('mul','×','n o','nPr','',O('×','*'),F('nPr(','Fnpr('));h5+=B('div','÷','n o','nCr','',O('÷','/'),F('nCr(','Fncr('));
+h5+=nk(1,'STAT',na)+nk(2,'CMPLX',na)+nk(3,'BASE',()=>mu(['1:DEC','2:HEX','3:BIN','4:OCT'],j=>setB([10,16,2,8][j-1])(),0,'BASE'));
+h5+=B('add','+','n o','Pol','',O('+','+'),F('Pol(','Fpol('));h5+=B('sub','–','n o','Rec','',O('−','-'),F('Rec(','Frec('));
+h5+=B('d0','0','n','Rnd','',N('0'),F('Rnd(','Frnd('));h5+=B('dot','•','n','Ran#','',N('.'),C('Ran#','Fran()'));
+h5+=B('exp','×10ˣ','n','π','e',{d:'×10^',j:'e',t:'E'},C('π','Math.PI'),C('e','Math.E'));
+h5+=B('ans','Ans','n','DRG▸','',C('Ans','Ans'),()=>mu(['1:°','2:ʳ','3:ᵍ'],i=>ins(P('°ʳᵍ'[i-1],'','Fdrg(',`,'${'DRG'[i-1]}')`)),0,'DRG▸'));
+h5+=B('eq','=','n o','','',eq);
+$('#g5').innerHTML=h5;
+function menuKey(id){if(id=='ac'||id=='on'){menu=null;return}let m=/^d(\d)$/.exec(id);if(!m)return;let d=+m[1],i=menu.z?d:d-1,f=menu.f;if(i>=0&&i<menu.items.length){menu=null;f(d)}}
+function press(id){const k=K[id];
+if(off){if(id=='on'){off=0;ac()}return render()}
+if(menu){menuKey(id);return render()}
+if(id=='sh'){SH=!SH;AL=0;return render()}if(id=='al'){AL=!AL;SH=0;return render()}
+let m=SH?'s':AL?'a':'n';SH=AL=0;
+try{
+if(pr){let c={dot:'.',neg:'-'}[id]||(/^d\d$/.test(id)?id[1]:'');if(id=='eq'){V.X=parseFloat(pr.buf)||0;pr=null;eq()}else if(id=='ac')pr=null;else pr.buf+=c;return render()}
+if(['up','dn','lf','rt'].includes(id)){err='';if(done){done=0;res=null;cur=T.length}
+if(id=='lf')cur=M.max(0,cur-1);if(id=='rt')cur=M.min(T.length,cur+1);
+if(id=='up'&&hist.length){hi=M.max(0,hi-1);T=hist[hi].slice();cur=T.length;done=0;res=null}
+if(id=='dn'&&hist.length&&hi<hist.length-1){hi++;T=hist[hi].slice();cur=T.length}return render()}
+if(pend){let a=k.a,l=a&&a.t=='c'&&/^[A-FXYM]$/.test(a.d)&&a.d;if(l){if(pend=='sto')V[l]=V.Ans;else ins(L(l))}pend=null;return render()}
+let a=k[m];if(typeof a=='function')a();else if(a)ins(a);
+}catch(e){err='Syntax ERROR'}
+render()}
+function render(){
+$('#lcd').classList.toggle('off',!!off);
+$('#sb').innerHTML=[SH&&'S',AL&&'A',HY&&'hyp',pend&&pend.toUpperCase(),ow&&'INS',V.M&&'M',ang,{f:'FIX',s:'SCI'}[disp.m],{16:'HEX',2:'BIN',8:'OCT'}[base],io=='M'&&'Math ▲'].filter(Boolean).map(x=>`<span>${x}</span>`).join('');
+const l1=$('#l1'),l2=$('#l2'),CU='<span class=cur></span>';l1.classList.toggle('m',!!menu);
+if(menu){l1.innerHTML=(menu.t?'<b>'+menu.t+'</b><br>':'')+menu.items.map(x=>menu.z?x:x).join('&nbsp; ');l2.innerHTML=''}
+else if(pr){l1.innerHTML='X? '+pr.buf+CU;l2.innerHTML=''}
+else{l1.innerHTML=T.map((t,i)=>(i==cur&&!done?CU:'')+t.d).join('')+(cur>=T.length&&!done?CU:'');
+let s=err||resStr(),f=!err&&/^(-?)(\d+)\/(\d+)$/.exec(s);l2.innerHTML=f?`${f[1]}<span class=fr><i>${f[2]}</i><i>${f[3]}</i></span>`:s}
+l1.scrollLeft=l1.scrollWidth;
+$('[data-k=sh]').classList.toggle('on',!!SH);$('[data-k=al]').classList.toggle('on',!!AL)}
+document.addEventListener('click',e=>{let b=e.target.closest('[data-k]');b&&press(b.dataset.k)});
+const KM={'.':'dot','+':'add','-':'sub','*':'mul','/':'div',Enter:'eq','=':'eq','(':'lp',')':'rp',Backspace:'del',Escape:'ac',ArrowLeft:'lf',ArrowRight:'rt',ArrowUp:'up',ArrowDown:'dn',s:'sin',c:'cos',t:'tan',l:'log',n:'ln',r:'sqrt','^':'pow',q:'sq',h:'hyp',m:'mp','!':['sh','inv'],p:['sh','exp'],'%':['sh','lp'],',':['sh','rp'],i:'inv'};
+document.addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey)return;let k=/^\d$/.test(e.key)?'d'+e.key:KM[e.key];if(!k)return;e.preventDefault();[].concat(k).forEach(press)});
+render();
+</script></body></html>
